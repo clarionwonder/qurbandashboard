@@ -2,16 +2,32 @@
 
 Online qurban and aqiqah management for GERMY: organisers set up campaigns and packages, participants book shares (bahagian) and pay online, and shares are allocated to animals automatically.
 
+## Try it locally (demo mode)
+
+No database or payment keys needed. The app runs on built-in sample data that resets on restart.
+
+```bash
+npm install
+DEMO_MODE=true npm run build
+DEMO_MODE=true npm start      # open http://localhost:3000 and http://localhost:3000/admin
+```
+
+On Windows PowerShell use `$env:DEMO_MODE="true"; npm run build; npm start`. In demo mode the organiser dashboard needs no sign-in and a "Demo payment" option marks bookings paid.
+
+## Language and theme
+
+Every page, participant and organiser, switches between Bahasa Malaysia and English (BM / EN in the header). Bahasa Malaysia is the default. The theme button cycles dark, light and "match device". Both choices are remembered in a cookie. Text lives in `src/lib/i18n/dict.ts`. Receipts and certificates always print in light colours.
+
 ## Features
 
-**Participants (public, Bahasa Melayu)**
+**Participants (public)**
 - Campaign page at `/c/<slug>` with packages, live availability and a booking form (one participant name per share).
 - Online payment through Billplz, ToyyibPay, Bayarcash or SenangPay, or manual bank transfer with receipt upload.
 - Order page with payment status, allocated animal and share number, and slaughter / distribution progress.
 - Printable receipt and participation certificate (Print, then Save as PDF).
 - Order lookup at `/semak` by order number and phone.
 
-**Organisers (`/admin`, English)**
+**Organisers (`/admin`)**
 - Overview of every active campaign: amount collected, shares sold, orders to verify, animal progress.
 - Campaigns and packages: animal type, shares per animal (7 for cow, 1 for goat), price per share, optional cap on animals.
 - Animal board: each animal's 7 slots and names; move it through filling, full, slaughtered, distributed.

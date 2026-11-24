@@ -1,3 +1,4 @@
+import { isDemo } from "../env";
 import type { PaymentMethod } from "../types";
 import { bayarcash } from "./bayarcash";
 import { billplz } from "./billplz";
@@ -9,7 +10,7 @@ export const gateways: Gateway[] = [billplz, toyyibpay, bayarcash, senangpay];
 
 export const getGateway = (id: string) => gateways.find((g) => g.id === id);
 
-export const demoEnabled = () => process.env.ENABLE_DEMO_PAYMENT === "true";
+export const demoEnabled = () => isDemo || process.env.ENABLE_DEMO_PAYMENT === "true";
 
 /** Payment methods a participant can choose for a campaign. */
 export function availableMethods(hasBankDetails: boolean): PaymentMethod[] {

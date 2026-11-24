@@ -3,17 +3,18 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getPublicCampaign } from "@/lib/data";
+import { getI18n } from "@/lib/i18n/server";
 import { availableMethods } from "@/lib/payments";
 import { createServiceClient } from "@/lib/supabase/admin";
 
-const schema = z.object({
+const makeSchema = (e: { name: string; phone: string; email: string }) => z.object({
   slug: z.string(),
   package_id: z.string().uuid(),
   quantity: z.coerce.number().int().min(1).max(50),
   participants: z.array(z.string().trim().max(120)),
-  buyer_name: z.string().trim().min(2, "Sila isi nama penuh").max(120),
-  buyer_phone: z.string().trim().regex(/^\+?[0-9\s-]{9,15}$/, "Nombor telefon tidak sah"),
-  buyer_email: z.string().trim().email("E-mel tidak sah"),
+  buyer_name: z.string().trim().min(2, e.name).max(120),
+  buyer_phone: z.string().trim().regex(/^\+?[0-9\s-]{9,15}$/, e.phone),
+  buyer_email: z.string().trim().email(e.email),
   buyer_address: z.string().trim().max(300).optional(),
   payment_method: z.enum(["billplz", "toyyibpay", "bayarcash", "senangpay", "manual", "demo"]),
 });
@@ -21,7 +22,9 @@ const schema = z.object({
 export type BookingState = { error?: string };
 
 export async function createOrder(_prev: BookingState, form: FormData): Promise<BookingState> {
-  const parsed = schema.safeParse({
+  const { t } = await getI18n();
+  const E = t.book.errors;
+  const parsed = makeSchema(E).safeParse({
     slug: form.get("slug"),
     package_id: form.get("package_id"),
     quantity: form.get("quantity"),
@@ -32,19 +35,19 @@ export async function createOrder(_prev: BookingState, form: FormData): Promise<
     buyer_address: form.get("buyer_address") || undefined,
     payment_method: form.get("payment_method"),
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Maklumat tidak lengkap" };
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? E.incomplete };
   const d = parsed.data;
 
   const found = await getPublicCampaign(d.slug);
-  if (!found || found.campaign.status !== "open") return { error: "Kempen ini tidak lagi menerima tempahan." };
+  if (!found || found.campaign.status !== "open") return { error: E.closed };
   const pkg = found.packages.find((p) => p.id === d.package_id);
-  if (!pkg) return { error: "Pakej tidak dijumpai." };
+  if (!pkg) return { error: E.noPackage };
   if (pkg.shares_remaining !== null && d.quantity > pkg.shares_remaining) {
-    return { error: `Hanya ${Math.max(pkg.shares_remaining, 0)} bahagian lagi tersedia untuk pakej ini.` };
+    return { error: E.onlyLeft(Math.max(pkg.shares_remaining, 0)) };
   }
   const c = found.campaign;
   const methods = availableMethods(!!(c.bank_name && c.bank_account_no));
-  if (!methods.includes(d.payment_method)) return { error: "Kaedah bayaran tidak tersedia." };
+  if (!methods.includes(d.payment_method)) return { error: E.noMethod };
 
   const participants = Array.from({ length: d.quantity }, (_, i) => d.participants[i] || d.buyer_name);
   const amount = Number((pkg.price_per_share * d.quantity).toFixed(2));
@@ -66,7 +69,7 @@ export async function createOrder(_prev: BookingState, form: FormData): Promise<
     })
     .select("id")
     .single();
-  if (error || !order) return { error: "Tempahan gagal disimpan. Sila cuba lagi." };
+  if (error || !order) return { error: E.save };
 
   if (d.payment_method === "manual" || d.payment_method === "demo") redirect(`/order/${order.id}`);
   redirect(`/pay/${order.id}`);
