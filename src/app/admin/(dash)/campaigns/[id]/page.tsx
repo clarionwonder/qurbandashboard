@@ -25,7 +25,8 @@ export default async function CampaignDetail({ params }: { params: Promise<{ id:
   if (!c) notFound();
   const campaign = c as Campaign;
   const packages = (pk ?? []) as Package[];
-  const animals = (an ?? []) as Animal[];
+  const pkgIndex = (pid: string) => packages.findIndex((p) => p.id === pid);
+  const animals = ((an ?? []) as Animal[]).sort((x, y) => pkgIndex(x.package_id) - pkgIndex(y.package_id) || x.seq - y.seq);
   const shares = (sh ?? []) as { animal_id: string; slot: number; participant_name: string; order_id: string }[];
 
   return (

@@ -43,7 +43,7 @@ body {
   @apply mb-1 block text-sm font-medium text-stone-700;
 }
 @utility badge {
-  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  @apply whitespace-nowrap inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
 }
 @utility th {
   @apply px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-stone-500;

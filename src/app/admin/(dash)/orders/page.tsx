@@ -54,10 +54,10 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
                 <td className="td">{o.buyer_name}<br /><span className="text-xs text-stone-500">{o.buyer_phone}</span></td>
                 <td className="td">{o.packages?.name}</td>
                 <td className="td text-right">{o.quantity}</td>
-                <td className="td text-right">{rm(o.amount)}</td>
+                <td className="td whitespace-nowrap text-right">{rm(o.amount)}</td>
                 <td className="td text-xs">{methodLabel[o.payment_method]}</td>
                 <td className="td"><Badge tone={statusTone[o.status]}>{orderStatusLabel[o.status]}</Badge></td>
-                <td className="td text-xs text-stone-500">{dateTimeMY(o.created_at)}</td>
+                <td className="td whitespace-nowrap text-xs text-stone-500">{dateTimeMY(o.created_at)}</td>
                 <td className="td">
                   {o.status === "awaiting_verification" && (
                     <form action={approveOrder.bind(null, o.id)}><button className="btn-primary px-3 py-1.5 text-xs">Approve</button></form>

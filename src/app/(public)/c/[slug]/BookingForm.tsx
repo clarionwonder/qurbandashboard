@@ -95,17 +95,17 @@ export function BookingForm({ slug, packages, methods }: { slug: string; package
         )}
       </fieldset>
 
-      <div className="card sticky bottom-3 flex flex-wrap items-center justify-between gap-3 border-brand-200">
-        <div>
-          <p className="text-sm text-stone-500">Jumlah</p>
-          <p className="text-2xl font-extrabold text-brand-900">{rm((pkg?.price_per_share ?? 0) * qty)}</p>
-        </div>
-        <div className="flex flex-col items-end gap-1">
-          {state.error && <p className="text-sm font-medium text-rose-700">{state.error}</p>}
-          <button className="btn-primary px-6" disabled={pending || !pkg || methods.length === 0}>
+      <div className="card sticky bottom-3 border-brand-200 p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs text-stone-500 sm:text-sm">Jumlah</p>
+            <p className="text-xl font-extrabold text-brand-900 sm:text-2xl">{rm((pkg?.price_per_share ?? 0) * qty)}</p>
+          </div>
+          <button className="btn-primary px-4 sm:px-6" disabled={pending || !pkg || methods.length === 0}>
             {pending ? "Memproses…" : "Teruskan ke bayaran"}
           </button>
         </div>
+        {state.error && <p className="mt-2 text-sm font-medium text-rose-700">{state.error}</p>}
       </div>
     </form>
   );

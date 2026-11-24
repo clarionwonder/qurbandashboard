@@ -22,7 +22,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
     <div className="mx-auto max-w-3xl px-4 py-10">
       <span className="badge bg-brand-50 uppercase text-brand-700">{c.type}</span>
       <h1 className="mt-2 text-3xl font-extrabold text-brand-900">{c.title}</h1>
-      <p className="mt-1 text-stone-600">{c.location ?? "Lokasi akan dimaklumkan"} · {dateMY(c.event_date)}</p>
+      <p className="mt-1 text-stone-600">{c.location ?? "Lokasi akan dimaklumkan"}{c.event_date ? ` · ${dateMY(c.event_date)}` : ""}</p>
       {c.description && <p className="mt-4 whitespace-pre-line text-stone-700">{c.description}</p>}
       <div className="mt-8">
         {c.status === "open" ? (

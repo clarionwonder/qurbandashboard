@@ -9,7 +9,7 @@ export function Logo({ href = "/", light = false }: { href?: string; light?: boo
           <path d="M12 9v9" />
         </svg>
       </span>
-      <span className={`text-lg font-extrabold tracking-tight ${light ? "text-white" : "text-brand-900"}`}>
+      <span className={`whitespace-nowrap text-base font-extrabold sm:text-lg tracking-tight ${light ? "text-white" : "text-brand-900"}`}>
         GERMY <span className="font-semibold text-gold-500">Qurban</span>
       </span>
     </Link>
@@ -21,7 +21,7 @@ export function PublicHeader() {
     <header className="no-print border-b border-stone-200 bg-white/80 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
         <Logo />
-        <nav className="flex items-center gap-4 text-sm font-medium text-stone-600">
+        <nav className="flex items-center gap-3 whitespace-nowrap text-xs font-medium text-stone-600 sm:gap-4 sm:text-sm">
           <Link href="/#kempen" className="hover:text-brand-700">Kempen</Link>
           <Link href="/semak" className="hover:text-brand-700">Semak tempahan</Link>
         </nav>

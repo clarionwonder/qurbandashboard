@@ -57,7 +57,7 @@ export default async function Home() {
                 <span className="badge bg-brand-50 uppercase text-brand-700">{c.type}</span>
                 <h3 className="mt-2 text-lg font-bold text-brand-900 group-hover:text-brand-700">{c.title}</h3>
                 <p className="mt-1 text-sm text-stone-600">
-                  {c.location ?? "Lokasi akan dimaklumkan"} · {dateMY(c.event_date)}
+                  {c.location ?? "Lokasi akan dimaklumkan"}{c.event_date ? ` · ${dateMY(c.event_date)}` : ""}
                 </p>
                 {c.description && <p className="mt-3 line-clamp-2 text-sm text-stone-600">{c.description}</p>}
                 <span className="mt-4 inline-block text-sm font-semibold text-brand-700">Tempah sekarang →</span>
